@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package grail.participant.v1;
+
+import "api/proto/participant.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+// Service for the Participants resource.
+service ParticipantService {
+
+  // Create a participant.
+  rpc CreateParticipant(CreateParticipantRequest) returns (Participant) {
+    option (google.api.http) = {
+      post: "/v1/participants"
+      body: "participant"
+    };
+    option (google.api.method_signature) = "participant";
+  }
+
+  // Get a participant.
+  rpc GetParticipant(GetParticipantRequest) returns (Participant) {
+    option (google.api.http) = {
+      get: "/v1/{name=participants/*}"
+    };
+    option (google.api.method_signature) = "name";
+  }
+
+  // Update a participant.
+  rpc UpdateParticipant(UpdateParticipantRequest) returns (Participant) {
+    option (google.api.http) = {
+      patch: "/v1/{participant.name=participants/*}"
+      body: "participant"
+    };
+    option (google.api.method_signature) = "participant,update_mask";
+  }
+
+  // Delete a participant.
+  rpc DeleteParticipant(DeleteParticipantRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{name=participants/*}"
+    };
+    option (google.api.method_signature) = "name";
+  }
+}
+
+// Request for the CreateParticipant RPC.
+message CreateParticipantRequest {
+  // The participant to create.
+  Participant participant = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request for the GetParticipant RPC.
+message GetParticipantRequest {
+  // The resource name of the participant to get.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "grail.com/Participant"
+  ];
+}
+
+// Request for the UpdateParticipant RPC.
+message UpdateParticipantRequest {
+  // The participant to update.
+  Participant participant = 1;
+
+  // The fields that should be updated.
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+// Request for the DeleteParticipant RPC.
+message DeleteParticipantRequest {
+  // The resource name of the participant to delete.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "grail.com/Participant"
+  ];
+}

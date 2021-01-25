@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package grail.participant.v1;
+
+import "google/api/resource.proto";
+import "google/type/date.proto";
+
+// Resource representing a participant in the trial.
+message Participant {
+  option (google.api.resource) = {
+    type: "grail.com/Participant"
+    pattern: "participants/{participant}"
+  };
+
+  // The name for this participant resource.
+  // 
+  // Note this is not the name of the *participant* but the name of the
+  // *resource*. See full_name for the participant's name and
+  // https://aip.dev/122#fields-representing-resource-names for an explanation.
+  string name = 1;
+
+  // The unique reference code for this participant.
+  string reference = 2;
+
+  // The participant's given name.
+  string given_name = 3;
+
+  // The participant's family name.
+  string family_name = 4;
+
+  // The date the participant was born.
+  google.type.Date birth_date = 5;
+
+  // The participant's phone number.
+  string phone_number = 6;
+
+  // The participant's physical address.
+  string address = 7;
+}

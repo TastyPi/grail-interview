@@ -1,0 +1,7 @@
+- included_paths:
+    - 'api/proto/**/*.proto'
+  disabled_rules:
+    # Disable rules only relevant for Java
+    - 'core::0191::java-multiple-files'
+    - 'core::0191::java-outer-classname'
+    - 'core::0191::java-package'
