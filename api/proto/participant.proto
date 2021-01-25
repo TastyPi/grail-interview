@@ -5,6 +5,8 @@ package grail.participant.v1;
 import "google/api/resource.proto";
 import "google/type/date.proto";
 
+option go_package = "github.com/TastyPi/grail-interview/api";
+
 // Resource representing a participant in the trial.
 message Participant {
   option (google.api.resource) = {
