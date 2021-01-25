@@ -10,7 +10,7 @@ import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 
-option go_package = "github.com/TastyPi/grail-interview/api/service";
+option go_package = "github.com/TastyPi/grail-interview/api/participant/service";
 
 // Service for the Participants resource.
 service ParticipantService {

@@ -1,4 +1,3 @@
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # Go
@@ -27,9 +26,30 @@ http_archive(
     ],
 )
 
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 
 gazelle_dependencies()
+
+go_repository(
+    name = "org_golang_google_grpc",
+    importpath = "google.golang.org/grpc",
+    sum = "h1:TwIQcH3es+MojMVojxxfQ3l3OF2KzlRxML2xZq0kRo8=",
+    version = "v1.35.0",
+)
+
+go_repository(
+    name = "org_golang_x_net",
+    importpath = "golang.org/x/net",
+    sum = "h1:003p0dJM77cxMSyCPFphvZf/Y5/NXf5fzg6ufd1/Oew=",
+    version = "v0.0.0-20210119194325-5f4716e94777",
+)
+
+go_repository(
+    name = "org_golang_x_text",
+    importpath = "golang.org/x/text",
+    version = "v0.3.5",
+    sum = "h1:i6eZZ+zk0SOf0xgBpEpPD18qWcJda6q1sxt3S0kzyUQ="
+)
 
 # Protobuf
 http_archive(
@@ -48,18 +68,10 @@ rules_proto_dependencies()
 
 rules_proto_toolchains()
 
-# googleapis
-git_repository(
-    name = "com_google_googleapis",
-    commit = "2e29020ce87808b810deb20e0925b7e26c5e72c1",
-    remote = "https://github.com/googleapis/googleapis.git",
-    shallow_since = "1611601086 -0800",
-)
+# load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
 
-load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
-
-switched_rules_by_language(
-    name = "com_google_googleapis_imports",
-    go = True,
-    grpc = True,
-)
+# switched_rules_by_language(
+#     name = "com_google_googleapis_imports",
+#     go = True,
+#     grpc = True,
+# )
