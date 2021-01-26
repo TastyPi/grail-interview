@@ -1,11 +1,12 @@
 package main
 
 import (
-	"log"
-	"net"
+	"context"
+	"flag"
+	"net/http"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+	"github.com/golang/glog"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	pb "github.com/TastyPi/grail-interview/api/participant"
 	"github.com/TastyPi/grail-interview/internal/participant/server"
@@ -16,20 +17,26 @@ const (
 )
 
 func main() {
-	// Start listening for requests.
-	lis, err := net.Listen("tcp", port)
+	flag.Parse()
+	defer glog.Flush()
+
+	if err := startServer(); err != nil {
+		glog.Fatal(err)
+	}
+}
+
+func startServer() error {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	mux := runtime.NewServeMux()
+	err := pb.RegisterParticipantServiceHandlerServer(ctx, mux, server.Create())
 	if err != nil {
-		log.Fatalf("Failed to listen on port %v", port)
+		return err
 	}
-	log.Println("Listening on port", port)
 
-	// Register the service.
-	s := grpc.NewServer()
-	pb.RegisterParticipantServiceServer(s, server.Create())
-
-	// Register reflection service on gRPC server.
-	reflection.Register(s)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
-	}
+	glog.Infoln("Listening on port", port)
+	glog.Flush()
+	return http.ListenAndServe(port, mux)
 }
