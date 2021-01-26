@@ -47,8 +47,8 @@ go_repository(
 go_repository(
     name = "org_golang_x_text",
     importpath = "golang.org/x/text",
+    sum = "h1:i6eZZ+zk0SOf0xgBpEpPD18qWcJda6q1sxt3S0kzyUQ=",
     version = "v0.3.5",
-    sum = "h1:i6eZZ+zk0SOf0xgBpEpPD18qWcJda6q1sxt3S0kzyUQ="
 )
 
 # Protobuf
@@ -67,11 +67,3 @@ load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_
 rules_proto_dependencies()
 
 rules_proto_toolchains()
-
-# load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
-
-# switched_rules_by_language(
-#     name = "com_google_googleapis_imports",
-#     go = True,
-#     grpc = True,
-# )

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package grail.participant.v1;
 
-import "api/proto/participant.proto";
+import "api/participant/participant.proto";
 import "google/api/annotations.proto";
 import "google/api/client.proto";
 import "google/api/field_behavior.proto";
@@ -10,7 +10,7 @@ import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
 
-option go_package = "github.com/TastyPi/grail-interview/api/participant/service";
+option go_package = "github.com/TastyPi/grail-interview/api/participant";
 
 // Service for the Participants resource.
 service ParticipantService {

@@ -1,10 +1,6 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@bazel_gazelle//:def.bzl", "gazelle")
 
-go_binary(
-    name = "main",
-    srcs = ["main.go"],
-    deps = [
-        "//api/proto:participant_go_proto",
-        "//api/proto:participant_service_go_proto",
-    ],
-)
+# gazelle:prefix github.com/TastyPi/grail-interview
+# gazelle:build_file_name BUILD
+# gazelle:go_naming_convention import
+gazelle(name = "gazelle")

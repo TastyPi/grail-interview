@@ -1,5 +1,5 @@
 - included_paths:
-    - 'api/proto/**/*.proto'
+    - 'api/**/*.proto'
   disabled_rules:
     # Disable rules only relevant for Java
     - 'core::0191::java-multiple-files'
