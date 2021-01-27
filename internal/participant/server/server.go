@@ -24,10 +24,14 @@ func Create(s storage.ParticipantStorage) pb.ParticipantServiceServer {
 
 func (s *server) CreateParticipant(
 	ctx context.Context, request *pb.CreateParticipantRequest) (*pb.Participant, error) {
-	if request.Participant.Name != "" {
+	participant := request.Participant
+	if participant == nil {
+		participant = &pb.Participant{}
+	}
+	if participant.Name != "" {
 		return nil, status.Error(codes.InvalidArgument, "Name should not be set")
 	}
-	return s.Insert(*request.Participant)
+	return s.Insert(*participant)
 }
 
 func (s *server) GetParticipant(
@@ -42,7 +46,7 @@ func (s *server) GetParticipant(
 func (s *server) UpdateParticipant(
 	ctx context.Context, request *pb.UpdateParticipantRequest) (*pb.Participant, error) {
 	if !request.UpdateMask.IsValid(request.Participant) {
-		return nil, status.Error(codes.InvalidArgument, "Invalid Participant")
+		return nil, status.Error(codes.InvalidArgument, "update_mask does not match the participant")
 	}
 	name := request.Participant.Name
 	fmutils.Filter(request.Participant, request.UpdateMask.Paths)
@@ -60,7 +64,7 @@ func (s *server) DeleteParticipant(
 	ctx context.Context, request *pb.DeleteParticipantRequest) (*empty.Empty, error) {
 	err := s.Delete(request.Name)
 	if err != nil {
-		return nil, err
+		return nil, convertStorageError(err)
 	}
 	return &empty.Empty{}, nil
 }
