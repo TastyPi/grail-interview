@@ -17,7 +17,7 @@ message Participant {
   // The name for this participant resource.
   // 
   // Note this is not the name of the *participant* but the name of the
-  // *resource*. See full_name for the participant's name and
+  // *resource*. See given_name and family_name for the participant's name and
   // https://aip.dev/122#fields-representing-resource-names for an explanation.
   string name = 1;
 

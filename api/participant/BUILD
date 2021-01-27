@@ -21,8 +21,8 @@ proto_library(
 go_proto_library(
     name = "participant_go_proto",
     compilers = [
-        "@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-grpc-gateway:go_gen_grpc_gateway",
         "@io_bazel_rules_go//proto:go_grpc",
+        "@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-grpc-gateway:go_gen_grpc_gateway",
     ],
     importpath = "github.com/TastyPi/grail-interview/api/participant",
     proto = ":participant_proto",

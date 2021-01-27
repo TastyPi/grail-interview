@@ -61,9 +61,9 @@ go_repository(
 
 go_repository(
     name = "com_github_grpc_ecosystem_grpc_gateway",
-    importpath = "github.com/grpc-ecosystem/grpc-gateway",
-    sum = "h1:gmcG1KaJ57LophUzW0Hy8NmPhnMZb4M0+kPpLofRdBo=",
-    version = "v1.16.0",
+    importpath = "github.com/grpc-ecosystem/grpc-gateway/v2",
+    sum = "h1:EhTvIsn53GrBLl45YVHk25cUHQHwlJfq2y8b7W5IpVY=",
+    version = "v2.1.0",
 )
 
 go_repository(

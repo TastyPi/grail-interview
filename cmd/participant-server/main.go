@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang/glog"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
 	pb "github.com/TastyPi/grail-interview/api/participant"
 	"github.com/TastyPi/grail-interview/internal/participant/server"
