@@ -18,6 +18,16 @@ import (
 	"github.com/TastyPi/grail-interview/internal/participant/storage"
 )
 
+// Phone number cases to check for RPCs that can modify the phone number.
+var phoneNumberCases = map[string]codes.Code{
+	"0123456789":     codes.OK,
+	"+0123456789":    codes.OK,
+	"+44 0123456789": codes.OK,
+	"++0123456789":   codes.InvalidArgument,
+	"01234+56789":    codes.InvalidArgument,
+	"012345A6789":    codes.InvalidArgument,
+}
+
 func TestCreateParticipant_NameSet(t *testing.T) {
 	store := storage.CreateInMemoryParticipantStorage()
 	server := server.Create(store)
@@ -45,9 +55,23 @@ func TestCreateParticipant(t *testing.T) {
 	response, err := server.CreateParticipant(context.Background(),
 		&pb.CreateParticipantRequest{Participant: p})
 
-	assert.Nil(t, err)
+	assert.Nil(t, err, err)
 	assert.Empty(t, cmp.Diff(response, p,
 		protocmp.Transform(), protocmp.IgnoreFields(response, "name")))
+}
+
+func TestCreateParticipant_PhoneNumberValidation(t *testing.T) {
+	store := storage.CreateInMemoryParticipantStorage()
+	server := server.Create(store)
+
+	for phoneNumber, expected := range phoneNumberCases {
+		_, err := server.CreateParticipant(context.Background(), &pb.CreateParticipantRequest{
+			Participant: &pb.Participant{PhoneNumber: phoneNumber},
+		})
+
+		assert.Equalf(t, expected, status.Code(err),
+			"%s should have returned %s", phoneNumber, expected)
+	}
 }
 
 func TestGetParticipant_NotFound(t *testing.T) {
@@ -116,6 +140,22 @@ func TestUpdateParticipant_UpdateMaskMissingField(t *testing.T) {
 	// Only the given_name has been updated.
 	p.GivenName = "Foo"
 	assert.Empty(t, cmp.Diff(p, response, protocmp.Transform()))
+}
+
+func TestUpdateParticipant_PhoneNumberValidation(t *testing.T) {
+	store := storage.CreateInMemoryParticipantStorage()
+	server := server.Create(store)
+	p, _ := server.CreateParticipant(context.Background(), &pb.CreateParticipantRequest{})
+
+	for phoneNumber, expected := range phoneNumberCases {
+		_, err := server.UpdateParticipant(context.Background(), &pb.UpdateParticipantRequest{
+			Participant: &pb.Participant{Name: p.Name, PhoneNumber: phoneNumber},
+			UpdateMask:  &field_mask.FieldMask{Paths: []string{"phone_number"}},
+		})
+
+		assert.Equalf(t, expected, status.Code(err),
+			"%s should have returned %s", phoneNumber, expected)
+	}
 }
 
 func TestGetAfterUpdate(t *testing.T) {

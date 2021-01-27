@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"errors"
+	"regexp"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/mennanov/fmutils"
@@ -31,6 +32,9 @@ func (s *server) CreateParticipant(
 	if participant.Name != "" {
 		return nil, status.Error(codes.InvalidArgument, "Name should not be set")
 	}
+	if err := validateParticipant(participant); err != nil {
+		return nil, err
+	}
 	return s.Insert(*participant)
 }
 
@@ -48,7 +52,12 @@ func (s *server) UpdateParticipant(
 	if !request.UpdateMask.IsValid(request.Participant) {
 		return nil, status.Error(codes.InvalidArgument, "update_mask does not match the participant")
 	}
+	if err := validateParticipant(request.Participant); err != nil {
+		return nil, err
+	}
+
 	name := request.Participant.Name
+	// Filter out fields that are not part of the update_mask
 	fmutils.Filter(request.Participant, request.UpdateMask.Paths)
 	p, err := s.Update(name, func(old pb.Participant) pb.Participant {
 		proto.Merge(&old, request.Participant)
@@ -57,6 +66,7 @@ func (s *server) UpdateParticipant(
 	if err != nil {
 		return nil, convertStorageError(err)
 	}
+
 	return p, nil
 }
 
@@ -67,6 +77,15 @@ func (s *server) DeleteParticipant(
 		return nil, convertStorageError(err)
 	}
 	return &empty.Empty{}, nil
+}
+
+var phoneNumberRegexp = regexp.MustCompile(`^\+?[0-9\s]+$`)
+
+func validateParticipant(p *pb.Participant) error {
+	if p.PhoneNumber != "" && !phoneNumberRegexp.MatchString(p.PhoneNumber) {
+		return status.Errorf(codes.InvalidArgument, "phone_number %s is invalid", p.PhoneNumber)
+	}
+	return nil
 }
 
 func convertStorageError(err error) error {
