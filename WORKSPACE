@@ -67,6 +67,13 @@ go_repository(
 )
 
 go_repository(
+    name = "com_github_mennanov_fmutils",
+    importpath = "github.com/mennanov/fmutils",
+    sum = "h1:NscONV1U0HzmqTYKic6UnLIdOBVGWnw5T672NC4yFCQ=",
+    version = "v0.0.3",
+)
+
+go_repository(
     name = "in_gopkg_yaml_v2",
     importpath = "gopkg.in/yaml.v2",
     sum = "h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=",

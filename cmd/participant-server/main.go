@@ -10,6 +10,7 @@ import (
 
 	pb "github.com/TastyPi/grail-interview/api/participant"
 	"github.com/TastyPi/grail-interview/internal/participant/server"
+	"github.com/TastyPi/grail-interview/internal/participant/storage"
 )
 
 const (
@@ -31,7 +32,8 @@ func startServer() error {
 	defer cancel()
 
 	mux := runtime.NewServeMux()
-	err := pb.RegisterParticipantServiceHandlerServer(ctx, mux, server.Create())
+	err := pb.RegisterParticipantServiceHandlerServer(
+		ctx, mux, server.Create(storage.CreateInMemoryParticipantStorage()))
 	if err != nil {
 		return err
 	}

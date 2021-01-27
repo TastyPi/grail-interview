@@ -21,21 +21,18 @@ message Participant {
   // https://aip.dev/122#fields-representing-resource-names for an explanation.
   string name = 1;
 
-  // The unique reference code for this participant.
-  string reference = 2;
-
   // The participant's given name.
-  string given_name = 3;
+  string given_name = 2;
 
   // The participant's family name.
-  string family_name = 4;
+  string family_name = 3;
 
   // The date the participant was born.
-  google.type.Date birth_date = 5;
+  google.type.Date birth_date = 4;
 
   // The participant's phone number.
-  string phone_number = 6;
+  string phone_number = 5;
 
   // The participant's physical address.
-  string address = 7;
+  string address = 6;
 }
