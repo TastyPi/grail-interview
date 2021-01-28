@@ -84,3 +84,6 @@ Example:
 ```shell
 curl -X DELETE localhost:50051/v1/participants/AAA-001
 ```
+## Running tests
+
+All the tests can be run with `bazel test //...`.
